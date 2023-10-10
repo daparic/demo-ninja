@@ -1,0 +1,26 @@
+# build.ninja
+
+# Compiler and linker settings
+CC = gcc
+CFLAGS = -Wall -Wextra
+LDFLAGS =
+
+# Targets
+builddir = build
+
+rule compile
+  command = $CC -MMD -MF $out.d -c $in -o $out $CFLAGS
+  depfile = $out.d
+  deps = gcc
+
+rule link
+  command = $CC $in -o $out $LDFLAGS
+  description = Linking $out
+
+# Build rules
+build $builddir/main.o: compile main.c
+build $builddir/hello: link $builddir/main.o
+
+# Default target
+default $builddir/hello
+
